@@ -1,0 +1,20 @@
+{
+  "version": "4",
+  "workspace": {
+    "dependencies": [
+      "jsr:@std/assert@1"
+    ],
+    "members": {
+      "aws-lambda-deno-runtime": {
+        "dependencies": [
+          "jsr:@std/assert@1"
+        ]
+      },
+      "example-lambda": {
+        "dependencies": [
+          "jsr:@std/assert@1"
+        ]
+      }
+    }
+  }
+}
