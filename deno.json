@@ -11,6 +11,7 @@
     "example-lambda:compile:all": "rm -rf ./dist/example-lambda && deno run example-lambda:compile:x86-linux & deno run example-lambda:compile:arm-linux & deno run example-lambda:compile:arm-mac"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+    "@types/lodash": "npm:@types/lodash@^4.17.24"
   }
 }

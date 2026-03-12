@@ -20,16 +20,8 @@ export class AwsLambdaRuntime {
   }
 
   public register(identifier: string, handler: () => any) {
-    try {
-      this.handlers.set(identifier, handler);
-      return this;
-    } catch(error) {
-      // need to call POST /runtime/invocation/${awsRequestId}/error here to report the error initializing the runtime
-      // TODO: Figure out what to do with this unawaited promise
-      this.runtimeClient.reportInitializationError(error);
-      throw error;
-    }
-
+    this.handlers.set(identifier, handler);
+    return this;
   }
 
   public async invoke() {

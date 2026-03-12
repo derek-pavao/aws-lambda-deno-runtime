@@ -1,11 +1,12 @@
 import { AwsLambdaRuntime } from "@dp/aws-lambda-deno-runtime";
+import _ from "lodash";
 
 function basicHandler() {
-  console.log("Hello from Deno!");
+  console.log(_.upperCase("Hello from Deno!"));
 }
 
 function basicHandler2() {
-  console.log("hello from Deno 2!");
+  console.log(_.upperCase("hello from Deno 2!"));
 }
 
 new AwsLambdaRuntime()
