@@ -1,4 +1,5 @@
 import { RuntimeApiClient } from "./runtime-api-client/mod.ts";
+import { NoSuchHandlerError } from "./errors.ts";
 
 console.log("This is global code running in the runtime lib");
 
@@ -24,6 +25,7 @@ export class AwsLambdaRuntime {
       return this;
     } catch(error) {
       // need to call POST /runtime/invocation/${awsRequestId}/error here to report the error initializing the runtime
+      // TODO: Figure out what to do with this unawaited promise
       this.runtimeClient.reportInitializationError(error);
       throw error;
     }
@@ -34,13 +36,14 @@ export class AwsLambdaRuntime {
     const handler = this.handlers.get(this.handlerName!)!;
 
     if (!handler) {
-      throw new Error(`No handler found for ${this.handlerName}`);
+      await this.runtimeClient.reportInitializationError(new NoSuchHandlerError(this.handlerName!));
+      return Deno.exit(1);
     }
 
     while (true) {
       const next = await this.runtimeClient.getNextEvent();
 
-      console.log("Got next invocation", next);
+      console.log("Got next invocation", JSON.stringify(next));
       try {
         const result = await handler.call(this, next.event, next.context);
         await this.runtimeClient.finalizeEvent("SUCCESS", next.context.awsRequestId, result);

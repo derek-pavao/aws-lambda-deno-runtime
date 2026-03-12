@@ -1,3 +1,5 @@
+import { InitializationError } from "../errors.ts";
+
 type LambdaEvent = Record<string, any> | Record<string, any>[] | string;
 
 export class RuntimeApiClient {
@@ -13,9 +15,7 @@ export class RuntimeApiClient {
     const body = await this.getBodyFromResponse(res);
     const traceId = res.headers.get("Lambda-Runtime-Trace-Id");
 
-    if (traceId?.includes("Sampled=1")) {
-      Deno.env.set("_X_AMZN_TRACE_ID", traceId);
-    }
+    Deno.env.set("_X_AMZN_TRACE_ID", traceId!);
 
     return {
       event: body,
@@ -52,6 +52,9 @@ export class RuntimeApiClient {
         errorType: e.name,
         stackTrace: e.stack ? e.stack.split("\n") : [],
       }),
+      headers: {
+        "Lambda-Runtime-Function-Error-Type": e instanceof InitializationError ? e.type : "Runtime.UnknownReason"
+      }
     });
 
     return await this.getBodyFromResponse(res);
