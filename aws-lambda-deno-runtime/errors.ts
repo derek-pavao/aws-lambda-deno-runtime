@@ -1,5 +1,8 @@
 export class InitializationError extends Error {
-  constructor(msg: string, public type: "Runtime.NoSuchHandler" | "Runtime.UnknownReason") {
+  constructor(
+    msg: string,
+    public type: "Runtime.NoSuchHandler" | "Runtime.UnknownReason",
+  ) {
     super(msg);
   }
 }

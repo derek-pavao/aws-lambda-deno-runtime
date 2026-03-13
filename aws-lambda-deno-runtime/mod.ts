@@ -16,7 +16,6 @@ export class AwsLambdaRuntime {
   constructor(private runtimeClient = new RuntimeApiClient()) {
     console.log("This is code running in the runtime lib");
     this.handlerName = Deno.env.get("_HANDLER");
-
   }
 
   public register(identifier: string, handler: () => any) {
@@ -28,7 +27,9 @@ export class AwsLambdaRuntime {
     const handler = this.handlers.get(this.handlerName!)!;
 
     if (!handler) {
-      await this.runtimeClient.reportInitializationError(new NoSuchHandlerError(this.handlerName!));
+      await this.runtimeClient.reportInitializationError(
+        new NoSuchHandlerError(this.handlerName!),
+      );
       return Deno.exit(1);
     }
 
@@ -38,7 +39,11 @@ export class AwsLambdaRuntime {
       console.log("Got next invocation", JSON.stringify(next));
       try {
         const result = await handler.call(this, next.event, next.context);
-        await this.runtimeClient.finalizeEvent("SUCCESS", next.context.awsRequestId, result);
+        await this.runtimeClient.finalizeEvent(
+          "SUCCESS",
+          next.context.awsRequestId,
+          result,
+        );
       } catch (error: unknown) {
         let errorResponse: {
           errorMessage: string;
@@ -51,20 +56,24 @@ export class AwsLambdaRuntime {
             errorMessage: error.message,
             errorType: error.constructor.name,
             stackTrace: error.stack?.split("\n") ?? [],
-          }
+          };
         } else if (typeof error === "string") {
           errorResponse = {
             errorMessage: error,
-            errorType: "UnknownError"
-          }
+            errorType: "UnknownError",
+          };
         } else {
           errorResponse = {
             errorMessage: "Unknown error",
             errorType: "UnknownError",
-          }
+          };
         }
 
-        await this.runtimeClient.finalizeEvent("FAILURE", next.context.awsRequestId, errorResponse);
+        await this.runtimeClient.finalizeEvent(
+          "FAILURE",
+          next.context.awsRequestId,
+          errorResponse,
+        );
       }
     }
   }

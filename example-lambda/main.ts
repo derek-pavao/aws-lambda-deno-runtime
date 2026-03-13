@@ -10,6 +10,6 @@ function basicHandler2() {
 }
 
 new AwsLambdaRuntime()
-    .register("example-lambda.basicHandler", basicHandler)
-    .register("example-lambda.basicHandler2", basicHandler2)
-    .invoke();
+  .register("example-lambda.basicHandler", basicHandler)
+  .register("example-lambda.basicHandler2", basicHandler2)
+  .invoke();
