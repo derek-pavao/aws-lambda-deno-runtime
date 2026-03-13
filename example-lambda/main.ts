@@ -1,4 +1,4 @@
-import { AwsLambdaRuntime } from "@dp/aws-lambda-deno-runtime";
+import { AwsLambdaRuntime } from "@dotdeeka/aws-lambda-deno-runtime";
 import _ from "lodash";
 
 function basicHandler() {

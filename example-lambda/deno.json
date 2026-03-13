@@ -1,7 +1,7 @@
 {
   "name": "example-lambda",
   "version": "0.1.0",
-  "exports": "./mod.ts",
+  "exports": "./main.ts",
   "tasks": {
     "dev": "deno test --watch mod.ts"
   },

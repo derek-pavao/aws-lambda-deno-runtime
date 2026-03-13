@@ -1,5 +1,5 @@
 {
-  "name": "@dp/aws-lambda-deno-runtime",
+  "name": "@dotdeeka/aws-lambda-deno-runtime",
   "version": "0.1.0",
   "exports": "./mod.ts",
   "tasks": {
